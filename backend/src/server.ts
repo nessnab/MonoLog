@@ -3,6 +3,7 @@ import morgan from "morgan";
 // import helmet from "helmet";
 
 import workspaceRoutes from "./routes/workspace.routes";
+import projectRoutes from "./routes/project.routes";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", workspaceRoutes);
+app.use("/", projectRoutes);
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");
