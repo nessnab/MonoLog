@@ -5,16 +5,23 @@ export class LogController {
   // Get all logs for a project
   async getLogs(req: Request, res: Response) {
     try {
-      const { projectId } = req.params;
+      const { workspaceId, projectId } = req.params;
       const logs = await prisma.log.findMany({
-        where: { projectId: Number(projectId) },
+        where: {
+          projectId: Number(projectId),
+          project: {
+            workspaceId: Number(workspaceId),
+          },
+        },
         include: {
           user: {
             select: {
               role: true,
-              
             },
-          }
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
       res.json(logs);
