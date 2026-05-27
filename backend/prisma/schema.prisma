@@ -22,7 +22,6 @@ model User {
 
   workspaceId Int?
   workspace   Workspace? @relation(fields: [workspaceId], references: [id])
-  tasks       Task[]
   logs        Log[]
 }
 
@@ -44,23 +43,7 @@ model Project {
   workspaceId Int
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
 
-  tasks Task[]
-}
-
-model Task {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  status      String   @default("TODO")
-  reminder    Int?
-  createdAt   DateTime @default(now())
-
-  projectId Int
-  project   Project @relation(fields: [projectId], references: [id])
-
-  assignedToId Int?
-  assignedTo   User? @relation(fields: [assignedToId], references: [id])
-  logs         Log[]
+  logs Log[]
 }
 
 model Log {
@@ -69,8 +52,8 @@ model Log {
   attachment String?
   createdAt  DateTime @default(now())
 
-  taskId Int
-  task   Task @relation(fields: [taskId], references: [id])
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id])
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
