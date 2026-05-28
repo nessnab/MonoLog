@@ -35,7 +35,8 @@ export class LogController {
   // Create a new log entry
   async createLog(req: Request, res: Response) {
     try {
-      const { content, attachment, projectId, userId } = req.body;
+      const { content, attachment, projectId } = req.body;
+      const userId = req.user.id
       const log = await prisma.log.create({
         data: {
           content,
