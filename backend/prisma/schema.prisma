@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id          Int        @id @default(autoincrement())
+  name        String
   email       String     @unique
   password    String
   role        String
@@ -16,6 +17,7 @@ model User {
   workspaceId Int?
   logs        Log[]
   workspace   Workspace? @relation(fields: [workspaceId], references: [id])
+  updatedAt   DateTime   @updatedAt
 }
 
 model Workspace {

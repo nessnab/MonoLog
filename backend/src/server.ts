@@ -5,6 +5,7 @@ import morgan from "morgan";
 import workspaceRoutes from "./routes/workspace.routes";
 import projectRoutes from "./routes/project.routes";
 import logRoutes from "./routes/log.routes";
+import userRoutes from "./routes/user.routes";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 app.use("/", workspaceRoutes);
 app.use("/", projectRoutes);
 app.use("/", logRoutes);
+app.use("/", userRoutes);
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");
