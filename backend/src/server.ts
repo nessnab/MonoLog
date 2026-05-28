@@ -1,21 +1,16 @@
 import express, { Request, Response } from "express";
 import morgan from "morgan";
-// import helmet from "helmet";
 
 import workspaceRoutes from "./routes/workspace.routes";
 import projectRoutes from "./routes/project.routes";
 import logRoutes from "./routes/log.routes";
 import userRoutes from "./routes/user.routes";
+import authRoutes from "./routes/auth.routes";
 
 const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
-// app.use(
-//   helmet({
-//     contentSecurityPolicy: false,
-//   })
-// );
 
 // routes
 app.get("/", (req, res) => {
@@ -27,6 +22,7 @@ app.use("/", workspaceRoutes);
 app.use("/", projectRoutes);
 app.use("/", logRoutes);
 app.use("/", userRoutes);
+app.use("/auth", authRoutes);
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");

@@ -3,24 +3,6 @@ import { prisma } from '../prisma';
 
 export class WorkspaceController {
 
-  // // get workspace by id
-  // async getWorkspaceById(req: Request, res: Response) {
-  //   try {
-  //     const { id } = req.params;
-  //     const workspace = await prisma.workspace.findUnique({
-  //       where: { id: parseInt(id) },
-  //     });
-  //     if (!workspace) {
-  //       return res.status(404).json({ error: "Workspace not found" });
-  //     }
-  //     res.json(workspace);
-  //   }
-  //   catch (error) {      
-  //     console.error("Error fetching workspace by ID:", error);
-  //     res.status(500).json({ error: "Failed to fetch workspace" });
-  //   }
-  // }
-
   // Get all workspaces
   async getWorkspaces(req: Request, res: Response) {
     try {
