@@ -26,7 +26,7 @@ export class ProjectController {
     try {
       const { workspaceId } = req.params;
       const projects = await prisma.project.findMany({
-        where: { workspaceId: Number(workspaceId) },
+        where: { workspaceId: workspaceId },
       });
       res.json(projects);
     }
@@ -45,7 +45,7 @@ export class ProjectController {
           name,
           description,
           workspace: {
-            connect: { id: workspaceId },
+            connect: { id: Number(workspaceId) },
           },
         },
       });

@@ -4,14 +4,28 @@ import { prisma } from '../prisma';
 export class WorkspaceController {
 
   // Get all workspaces
-  async getWorkspaces(req: Request, res: Response) {
+  async getWorkspace(req: Request, res: Response) {
     try {
-      const workspaces = await prisma.workspace.findMany();
-      res.json(workspaces);
+      const userId = req.user?.id;
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { workspaceId: true },
+      });
+
+      if (!user?.workspaceId) {
+        return res.status(404).json({
+          error: "User is not assigned to a workspace",
+        });
+      }
+      const workspace = await prisma.workspace.findUnique({
+        where: { id: user.workspaceId },
+        // select: { id: true, name: true },
+      });
+      res.json(workspace);
     }
     catch (error) {
-      console.error("Error fetching workspaces:", error);
-      res.status(500).json({ error: "Failed to fetch workspaces" });
+      console.error("Error fetching workspace:", error);
+      res.status(500).json({ error: "Failed to fetch workspace" });
     }
   }
 
@@ -39,19 +53,4 @@ export class WorkspaceController {
   
 }
 
-export const getWorkspaceById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const workspace = await prisma.workspace.findUnique({
-      where: { id: Number(id) },
-    });
-    if (!workspace) {
-      return res.status(404).json({ error: "Workspace not found" });
-    }
-    res.json(workspace);
-  } catch (error) {
-    console.error("Error fetching workspace by ID:", error);
-    res.status(500).json({ error: "Failed to fetch workspace" });
-  }
-}
 

@@ -39,4 +39,21 @@ export class AuthController {
       res.status(500).json({ error: "Failed to login" });
     }
   }
+
+  async getMe(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true, name: true, email: true, role: true, workspaceId: true },
+      });
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ error: "Failed to fetch user" });
+    }
+  }
 }

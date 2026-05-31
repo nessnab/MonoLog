@@ -6,7 +6,7 @@ const router = Router();
 
 const logController = new LogController();
 
-router.get("/workspaces/:workspaceId/projects/:projectId/logs", authMiddleware, logController.getLogs);
+router.get("/workspace/projects/:projectId/logs", authMiddleware, logController.getLogs);
 // router.get("/workspaces/:workspaceId/projects/:projectId/logs", authMiddleware, logController.getLogs);
 router.post("/logs", authMiddleware, logController.createLog);
 

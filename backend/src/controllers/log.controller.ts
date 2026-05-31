@@ -10,7 +10,7 @@ export class LogController {
         where: {
           projectId: Number(projectId),
           project: {
-            workspaceId: Number(workspaceId),
+            workspaceId: workspaceId,
           },
         },
         include: {
