@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export class AuthController {
+  // Handle error
+  
   // Login user
   async login(req: Request, res: Response) {
     try {
@@ -33,7 +35,17 @@ export class AuthController {
         process.env.JWT_SECRET as string,
         { expiresIn: "1d" }
       );
-      res.json({ token, name: user.name, email: user.email, role: user.role });
+      res.cookie("token", token, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        maxAge: 24 * 3 * 60 * 60 * 1000,
+      });
+      res.json({ 
+        name: user.name,
+        email: user.email,
+        role: user.role
+      });
     } catch (error) {
       console.error("Error logging in:", error);
       res.status(500).json({ error: "Failed to login" });

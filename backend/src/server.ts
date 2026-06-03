@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import morgan from "morgan";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import workspaceRoutes from "./routes/workspace.routes";
 import projectRoutes from "./routes/project.routes";
@@ -11,6 +13,11 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cookieParser());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 // routes
 app.get("/", (req, res) => {
