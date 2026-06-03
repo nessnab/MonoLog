@@ -26,7 +26,7 @@ export class ProjectController {
     try {
       const { workspaceId } = req.params;
       const projects = await prisma.project.findMany({
-        where: { workspaceId: workspaceId },
+        where: { workspaceId: Number(workspaceId) },
       });
       res.json(projects);
     }

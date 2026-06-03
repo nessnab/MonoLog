@@ -12,8 +12,6 @@ export default function ProtectedRoute() {
       cache: "no-cache",
     })
       .then((response) => {
-        console.log("status:", response.status);
-
         if (response.ok) {
           setAuthenticated(true);
         } else {
@@ -35,10 +33,6 @@ export default function ProtectedRoute() {
   if (!authenticated) {
     return <Navigate to="/login" replace />;
   } 
-  console.log({
-  loading,
-  authenticated,
-});
 
   return <Outlet />;
 }

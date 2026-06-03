@@ -32,7 +32,7 @@ function LoginPage() {
       });
 
       const userData = await userRes.json();
-      
+
       console.log('User data:', userData);
       navigate('/');
     }
