@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import ProjectList from '../components/ProjectList'
+import LogList from '../components/LogList'
 
 function DashboardPage() {
   interface Project {
@@ -11,6 +13,7 @@ function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [logs, setLogs] = useState<any[]>([])
+  const [content, setContent] = useState("")
 
   useEffect(() => {
     fetch('http://localhost:3000/auth/me', {
@@ -51,6 +54,39 @@ function DashboardPage() {
       })
   }, [selectedProject, user])
 
+
+  // Create logs
+  const handleCreateLog = async () => {
+    if (!selectedProject) {
+      alert("select a project first");
+      return
+    }
+
+    try {
+      const res = await fetch(
+        "http://localhost:3000/logs",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            content,
+            projectId: selectedProject.id,
+          }),
+        }
+      )
+
+      const data = await res.json();
+      console.log(data);
+      setLogs((prev) => [data, ...prev]);
+      setContent((""))
+    } catch (err) {
+      console.error(err)
+    }
+  } 
+
   return (
     <div>
       Dashboard Page
@@ -66,33 +102,29 @@ function DashboardPage() {
         }
       </div>
 
+      <ProjectList 
+        projects={projects}
+        selectedProject={selectedProject}
+        onSelectProject={setSelectedProject}
+      />
+
       <div>
-        <h2>Projects</h2>
-        <ul>
-          {projects?.map((project: any) => (
-            <li 
-              key={project.id}
-              onClick={() => setSelectedProject(project)}
-              style={{ cursor: 'pointer' }}
-            >
-              
-              {project.name}
-            </li>
-          ))}
-        </ul>
+        <h2>New Log</h2>
+
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="What did you work on today?"
+        />
+
+        <button onClick={handleCreateLog}>
+          Submit
+        </button>
       </div>
       
-      <div>
-        <h2>Logs</h2>
-
-        <ul>
-          {logs.map((log: any) => (
-            <li key={log.id}>
-              {log.content}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <LogList 
+        logs={logs}
+      />
       
     </div>
   )
