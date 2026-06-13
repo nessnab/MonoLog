@@ -9,6 +9,8 @@ function DashboardPage() {
   
   const [user, setUser] = useState(null)
   const [projects, setProjects] = useState<Project[]>([])
+  const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [logs, setLogs] = useState<any[]>([])
 
   useEffect(() => {
     fetch('http://localhost:3000/auth/me', {
@@ -34,6 +36,21 @@ function DashboardPage() {
     });
 }, [user]);
 
+  useEffect(() => {
+    if (!selectedProject || !user) return;
+    fetch(
+      `http://localhost:3000/workspace/${user.workspaceId}/projects/${selectedProject.id}/logs`,
+      {
+        credentials: 'include',
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("logs", data);
+        setLogs(data);
+      })
+  }, [selectedProject, user])
+
   return (
     <div>
       Dashboard Page
@@ -53,12 +70,30 @@ function DashboardPage() {
         <h2>Projects</h2>
         <ul>
           {projects?.map((project: any) => (
-            <li key={project.id}>
+            <li 
+              key={project.id}
+              onClick={() => setSelectedProject(project)}
+              style={{ cursor: 'pointer' }}
+            >
+              
               {project.name}
             </li>
           ))}
         </ul>
       </div>
+      
+      <div>
+        <h2>Logs</h2>
+
+        <ul>
+          {logs.map((log: any) => (
+            <li key={log.id}>
+              {log.content}
+            </li>
+          ))}
+        </ul>
+      </div>
+      
     </div>
   )
 }
