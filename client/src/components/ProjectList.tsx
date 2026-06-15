@@ -14,17 +14,15 @@ function ProjectList({
     <div>
       <h2>Projects</h2>
 
-      <ul>
         {projects.map((project) => (
-          <li
+          <div
             key={project.id}
             onClick={() => onSelectProject(project)}
             style={{cursor: 'pointer'}}
           >
             {project.name}
-          </li>
+          </div>
         ))}
-      </ul>
     </div>
   )
 }

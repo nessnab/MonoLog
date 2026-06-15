@@ -10,8 +10,13 @@ function DashboardPage() {
   }
   
   const [user, setUser] = useState(null)
+
+  const [projectName, setProjectName] = useState("")
+  const [projectDesc, setProjectDesc] = useState("")
+
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<any>(null)
+
   const [logs, setLogs] = useState<any[]>([])
   const [content, setContent] = useState("")
 
@@ -53,6 +58,39 @@ function DashboardPage() {
         setLogs(data);
       })
   }, [selectedProject, user])
+
+  // Create Project for admin
+
+  const handleCreateProject = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/projects",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            name: projectName,
+            description: projectDesc,
+            workspaceId: user.workspaceId,
+          }),
+        }
+      );
+
+      const data = await res.json()
+
+      console.log(data)
+      setProjects((prev) => [...prev, data])
+
+      setProjectName((""))
+      setProjectDesc((""))
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
 
 
   // Create logs
@@ -101,6 +139,32 @@ function DashboardPage() {
         </div>
         }
       </div>
+
+      {user?.role === "admin" && (
+        <div>
+          <h2>Create Project</h2>
+
+          <input 
+            type="text" 
+            placeholder="Project Name" 
+            value={projectName} 
+            onChange={(e) => setProjectName(e.target.value)}
+            required
+          />
+
+          <input 
+            type="text" 
+            placeholder="Project Description" 
+            value={projectDesc} 
+            onChange={(e) => setProjectDesc(e.target.value)}
+          />
+
+          <button onClick={handleCreateProject}>
+            Create
+          </button>
+
+        </div>
+      )}
 
       <ProjectList 
         projects={projects}
