@@ -30,26 +30,26 @@ export class WorkspaceController {
   }
 
   // Create a new workspace
-  async createWorkspace(req: Request, res: Response) {
-     try {
-      const { name } = req.body;
+  // async createWorkspace(req: Request, res: Response) {
+  //    try {
+  //     const { name } = req.body;
 
-      const workspace = await prisma.workspace.create({
-        data: {
-          name,
-        },
-      });
+  //     const workspace = await prisma.workspace.create({
+  //       data: {
+  //         name,
+  //       },
+  //     });
 
-      res.status(201).json(workspace);
+  //     res.status(201).json(workspace);
 
-    } catch (error) {
-      console.error("Error creating workspace:", error);
+  //   } catch (error) {
+  //     console.error("Error creating workspace:", error);
 
-      res.status(500).json({
-        error: "Failed to create workspace",
-      });
-    }
-  }
+  //     res.status(500).json({
+  //       error: "Failed to create workspace",
+  //     });
+  //   }
+  // }
   
 }
 

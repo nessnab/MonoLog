@@ -1,19 +1,26 @@
 import { Request, Response } from 'express';
 import { prisma } from '../prisma';
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken"
 
 export class UserController {
   // Create a new user
-  async createUser(req: Request, res: Response) {
+  async createUserAdmin(req: Request, res: Response) {
     try {
-      const { name, email, password, role, workspaceId } = req.body;
+      const { name, email, password, role, workspaceId, workspaceName } = req.body;
+
+      const workspace = await prisma.workspace.create({
+        data: {
+          name: workspaceName,
+        },
+      });
 
       // Check if email is already in use
       const existingUser = await prisma.user.findUnique({
         where: { email },
       });
       if (existingUser) {
-        return res.status(400).json({ error: "Email already in use" });
+        return res.status(400).json({ error: "Email already registered" });
       }
       // Hash the password before saving
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -22,11 +29,70 @@ export class UserController {
           email,
           password: hashedPassword,
           name,
-          role,
+          role:"admin"
+        },
+      });
+
+      // Generate JWT token
+      const token = jwt.sign(
+        { 
+          userId: user.id, 
+          email: user.email, 
+          role: user.role 
+        },
+        process.env.JWT_SECRET as string,
+        { expiresIn: "1d" }
+      );
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        maxAge: 24 * 3 * 60 * 60 * 1000,
+      });
+      
+      res.status(201).json({ 
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        workspaceName: workspace.name 
+      });
+
+    } catch (error) {
+      console.error("Error creating user:", error);
+      res.status(500).json({ error: "Failed to create user" });
+    }
+  }
+
+  
+  async createUserMember(req: Request, res: Response) {
+    try {
+      const { name, email, password, role, workspaceId, workspaceName } = req.body;
+
+      // Check if email is already in use
+      const existingUser = await prisma.user.findUnique({
+        where: { email },
+      });
+      if (existingUser) {
+        return res.status(400).json({ error: "Email already registered" });
+      }
+      // Hash the password before saving
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = await prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          name,
+          role:"member",
           workspaceId,
         },
       });
-      res.status(201).json({ name, email, role });
+      res.status(201).json({ 
+        name: user.name, 
+        email: user.email, 
+        role: user.role, 
+        workspaceId 
+      });
     } catch (error) {
       console.error("Error creating user:", error);
       res.status(500).json({ error: "Failed to create user" });

@@ -9,6 +9,6 @@ const router = Router();
 const workspaceController = new WorkspaceController();
 
 router.get("/workspace", authMiddleware, workspaceController.getWorkspace);
-router.post("/workspaces", roleMiddleware, workspaceController.createWorkspace);
+// router.post("/workspaces", roleMiddleware, workspaceController.createWorkspace);
 
 export default router;

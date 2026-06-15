@@ -6,6 +6,7 @@ const router = Router();
 
 const userController = new UserController();
 
-router.post("/users", roleMiddleware, userController.createUser);
+router.post("/admin", userController.createUserAdmin);
+router.post("/member", userController.createUserMember);
 
 export default router;
