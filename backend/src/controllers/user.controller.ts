@@ -7,13 +7,7 @@ export class UserController {
   // Create a new user
   async createUserAdmin(req: Request, res: Response) {
     try {
-      const { name, email, password, role, workspaceId, workspaceName } = req.body;
-
-      const workspace = await prisma.workspace.create({
-        data: {
-          name: workspaceName,
-        },
-      });
+      const { name, email, password, workspaceName } = req.body;
 
       // Check if email is already in use
       const existingUser = await prisma.user.findUnique({
@@ -22,6 +16,13 @@ export class UserController {
       if (existingUser) {
         return res.status(400).json({ error: "Email already registered" });
       }
+
+      const workspace = await prisma.workspace.create({
+        data: {
+          name: workspaceName,
+        },
+      });
+
       // Hash the password before saving
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await prisma.user.create({
@@ -29,7 +30,8 @@ export class UserController {
           email,
           password: hashedPassword,
           name,
-          role:"admin"
+          role:"admin",
+          workspaceId: workspace.id
         },
       });
 
@@ -55,6 +57,7 @@ export class UserController {
         name: user.name,
         email: user.email,
         role: user.role,
+        workspaceId: user.workspaceId,
         workspaceName: workspace.name 
       });
 
@@ -67,7 +70,8 @@ export class UserController {
   
   async createUserMember(req: Request, res: Response) {
     try {
-      const { name, email, password, role, workspaceId, workspaceName } = req.body;
+      const { name, email, password } = req.body;
+      const workspaceId = req.user?.workspaceId;
 
       // Check if email is already in use
       const existingUser = await prisma.user.findUnique({
@@ -84,7 +88,7 @@ export class UserController {
           password: hashedPassword,
           name,
           role:"member",
-          workspaceId,
+          workspaceId: workspaceId,
         },
       });
       res.status(201).json({ 

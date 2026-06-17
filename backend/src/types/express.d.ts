@@ -6,9 +6,9 @@ declare global {
         email: string;
         name: string;
         role: string;
-        // password?: string; // Optional if you exclude it during login
+        workspaceId: number | null;
+        // password?: string;
         // createdAt: Date;
-        // workspaceId: number | null;
         // updatedAt: Date;
       };
     }
