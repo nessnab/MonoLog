@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { data, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-function LoginPage() {
+function RegisterForm() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [workspaceName, setWorkspaceName] = useState('')
+
   const [error, setError] = useState(null)
   const navigate = useNavigate();
 
@@ -11,29 +14,22 @@ function LoginPage() {
     e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch('http://localhost:3000/admin', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ name, email, password, workspaceName })
       })
       const data = await response.json()
       // console.log('Login response:', data)
 
       if(!response.ok) {
-        setError(data.error || 'Invalid email or password')
+        setError(data.error || 'Email already registered')
         return
       }
 
-      const userRes = await fetch('http://localhost:3000/auth/me', {
-        credentials: 'include',
-      });
-
-      const userData = await userRes.json();
-
-      console.log('User data:', userData);
       navigate('/');
     }
     catch (err) {
@@ -45,6 +41,14 @@ function LoginPage() {
   return (
     <div>
       <form action="" onSubmit={handleSubmit}>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          placeholder="Enter your name" 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <input 
           type="text" 
           id="email" 
@@ -61,12 +65,20 @@ function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           />
+        <input 
+          type="text" 
+          id="workspaceName" 
+          name="workspaceName" 
+          placeholder="Enter your workspace name" 
+          value={workspaceName}
+          onChange={(e) => setWorkspaceName(e.target.value)}
+        />
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
       </form>
     </div>
   )
 }
 
-export default LoginPage
+export default RegisterForm
