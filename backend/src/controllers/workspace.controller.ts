@@ -29,6 +29,32 @@ export class WorkspaceController {
     }
   }
 
+  // Fetch members per workspace
+  async getWorkspaceUsers(req: Request, res: Response) {
+    try {
+      const { workspaceId } = req.params
+
+      const users = await prisma.user.findMany({
+        where: {
+          workspaceId: Number(workspaceId),
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true
+        },
+      });
+
+      res.json(users);
+    }
+    catch(err) {
+      console.error(err);
+      res.status(500).json({ error: "Failed to fetch users" });
+    }
+  }
+
+
   // Create a new workspace
   // async createWorkspace(req: Request, res: Response) {
   //    try {

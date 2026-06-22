@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 import CreateMemberForm from '../components/CreateMemberForm'
 
+import MemberList from '../components/MemberList'
 import ProjectList from '../components/ProjectList'
 import LogList from '../components/LogList'
 
@@ -13,6 +14,7 @@ function DashboardPage() {
   }
   
   const [user, setUser] = useState(null)
+  const [members, setMembers] = useState([]);
 
   const [projectName, setProjectName] = useState("")
   const [projectDesc, setProjectDesc] = useState("")
@@ -22,6 +24,22 @@ function DashboardPage() {
 
   const [logs, setLogs] = useState<any[]>([])
   const [content, setContent] = useState("")
+
+  useEffect(() => {
+  if (!user) return;
+
+  fetch(
+    `http://localhost:3000/workspace/${user.workspaceId}/users`,
+    {
+      credentials: "include",
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("members", data);
+      setMembers(data);
+    });
+  }, [user]);
 
   useEffect(() => {
     fetch('http://localhost:3000/auth/me', {
@@ -45,7 +63,7 @@ function DashboardPage() {
       // console.log("projects", data)
       setProjects(data);
     });
-}, [user]);
+  }, [user]);
 
   useEffect(() => {
     if (!selectedProject || !user) return;
@@ -153,7 +171,7 @@ function DashboardPage() {
         </div>
       )}
 
-      
+      <MemberList members={members} />
 
       {user?.role === "admin" && (
         <div>
