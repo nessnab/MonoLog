@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+
+import CreateMemberForm from '../components/CreateMemberForm'
+
 import ProjectList from '../components/ProjectList'
 import LogList from '../components/LogList'
 
@@ -142,6 +145,19 @@ function DashboardPage() {
 
       {user?.role === "admin" && (
         <div>
+          <h2>Create Member</h2>
+          <CreateMemberForm
+            workspaceId={user?.workspaceId}
+            // onMemberCreated={fetchMembers}
+          />
+        </div>
+      )}
+
+      
+
+      {user?.role === "admin" && (
+        <div>
+
           <h2>Create Project</h2>
 
           <input 

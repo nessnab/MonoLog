@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function RegisterForm() {
+function CreateMemberForm() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [workspaceName, setWorkspaceName] = useState('')
 
   const [error, setError] = useState(null)
   const navigate = useNavigate();
@@ -14,16 +13,15 @@ function RegisterForm() {
     e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:3000/admin', {
+      const response = await fetch('http://localhost:3000/member', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, email, password, workspaceName })
+        body: JSON.stringify({ name, email, password })
       })
       const data = await response.json()
-      // console.log('Login response:', data)
 
       if(!response.ok) {
         setError(data.error || 'Email already registered')
@@ -65,20 +63,12 @@ function RegisterForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           />
-        <input 
-          type="text" 
-          id="workspaceName" 
-          name="workspaceName" 
-          placeholder="Enter your workspace name" 
-          value={workspaceName}
-          onChange={(e) => setWorkspaceName(e.target.value)}
-        />
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Register</button>
+        <button type="submit">Create Member</button>
       </form>
     </div>
   )
 }
 
-export default RegisterForm
+export default CreateMemberForm
