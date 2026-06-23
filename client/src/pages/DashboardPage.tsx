@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import CreateMemberForm from '../components/CreateMemberForm'
 
@@ -12,6 +13,8 @@ function DashboardPage() {
     name: string
     description?: string
   }
+
+  const navigate = useNavigate()
   
   const [user, setUser] = useState(null)
   const [members, setMembers] = useState([]);
@@ -146,6 +149,24 @@ function DashboardPage() {
     }
   } 
 
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await fetch(
+        "http://localhost:3000/auth/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      navigate("/auth")
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
+
   return (
     <div>
       Dashboard Page
@@ -223,6 +244,10 @@ function DashboardPage() {
       <LogList 
         logs={logs}
       />
+
+      <button onClick={handleLogout}>
+        Logout
+      </button>
       
     </div>
   )
