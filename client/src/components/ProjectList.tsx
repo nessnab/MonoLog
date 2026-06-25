@@ -2,12 +2,14 @@ interface ProjectListProps {
   projects: any[]
   selectedProject: any
   onSelectProject: (project: any) => void
+  onEditProject: (project: any) => void
 }
 
 function ProjectList({
   projects,
   // selectedProjects,
-  onSelectProject
+  onSelectProject,
+  onEditProject
 }: ProjectListProps) {
 
   return (
@@ -21,6 +23,13 @@ function ProjectList({
             style={{cursor: 'pointer'}}
           >
             {project.name}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditProject(project)
+              }}>
+              Edit
+            </button>
           </div>
         ))}
     </div>

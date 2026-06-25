@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import CreateMemberForm from '../components/CreateMemberForm'
+import CreateMemberForm from '../components/MemberForm'
+import ProjectForm from '../components/ProjectForm'
 
 import MemberList from '../components/MemberList'
 import ProjectList from '../components/ProjectList'
@@ -24,6 +25,8 @@ function DashboardPage() {
 
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<any>(null)
+
+  const [editingProjectId, setEditingProjectId] = useState<number | null>(null)
 
   const [logs, setLogs] = useState<any[]>([])
   const [content, setContent] = useState("")
@@ -83,37 +86,68 @@ function DashboardPage() {
       })
   }, [selectedProject, user])
 
-  // Create Project for admin
+  // // Create Project for admin
 
-  const handleCreateProject = async () => {
+  const handleSubmitProject = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:3000/projects",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            name: projectName,
-            description: projectDesc,
-            workspaceId: user.workspaceId,
-          }),
-        }
-      );
+      if (editingProjectId) {
+        // EDIT
+        const res = await fetch(
+          `http://localhost:3000/projects/${editingProjectId}`,
+          {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              name: projectName,
+              description: projectDesc,
+            }),
+          }
+        );
+        const data = await res.json()
+        setProjects((prev) =>
+          prev.map((project) =>
+            project.id === data.id
+              ? data
+              : project
+          )
+        )
+      } else {
+        const res = await fetch(
+          "http://localhost:3000/projects",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              name: projectName,
+              description: projectDesc,
+              workspaceId: user.workspaceId,
+            }),
+          }
+        );
+        const data = await res.json()
+        setProjects((prev) => [...prev, data])
+      }
 
-      const data = await res.json()
-
-      console.log(data)
-      setProjects((prev) => [...prev, data])
-
+      setEditingProjectId(null)
       setProjectName((""))
       setProjectDesc((""))
     }
     catch (err) {
       console.error(err)
     }
+  }
+
+  // Update project
+  const handleEditProject = (project: any) => {
+    setEditingProjectId(project.id);
+    setProjectName(project.name);
+    setProjectDesc(project.description);
   }
 
 
@@ -193,38 +227,20 @@ function DashboardPage() {
       )}
 
       <MemberList members={members} />
-
-      {user?.role === "admin" && (
-        <div>
-
-          <h2>Create Project</h2>
-
-          <input 
-            type="text" 
-            placeholder="Project Name" 
-            value={projectName} 
-            onChange={(e) => setProjectName(e.target.value)}
-            required
-          />
-
-          <input 
-            type="text" 
-            placeholder="Project Description" 
-            value={projectDesc} 
-            onChange={(e) => setProjectDesc(e.target.value)}
-          />
-
-          <button onClick={handleCreateProject}>
-            Create
-          </button>
-
-        </div>
-      )}
+      <ProjectForm
+        projectName={projectName}
+        projectDesc={projectDesc}
+        setProjectName={setProjectName}
+        setProjectDesc={setProjectDesc}
+        handleSubmitProject={handleSubmitProject}
+        editingProjectId={editingProjectId}
+      />
 
       <ProjectList 
         projects={projects}
         selectedProject={selectedProject}
         onSelectProject={setSelectedProject}
+        onEditProject={handleEditProject}
       />
 
       <div>

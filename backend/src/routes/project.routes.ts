@@ -8,11 +8,8 @@ const router = Router();
 const projectController = new ProjectController();
 
 router.get("/workspace/:workspaceId/projects", authMiddleware, projectController.getProjects);
-router.post(
-  "/projects", 
-  authMiddleware, 
-  roleMiddleware, 
-  projectController.createProject);
+router.post("/projects", authMiddleware, roleMiddleware, projectController.createProject);
 router.get("/workspace/:workspaceId/projects/:projectId", authMiddleware, projectController.getProjectById);
+router.put("/projects/:projectId", authMiddleware, roleMiddleware, projectController.updateProject)
 
 export default router;

@@ -55,4 +55,30 @@ export class ProjectController {
       res.status(500).json({ error: "Failed to create project" });
     }
   }
+
+  // update existing project
+  async updateProject(req: Request, res: Response) {
+    try {
+      const { projectId } = req.params;
+      const { name, description } = req.body;
+
+      const project = await prisma.project.update({
+        where: {
+          id: Number(projectId),
+        },
+        data: {
+          name,
+          description,
+        },
+      });
+
+      res.json(project)
+    }
+    catch (err) {
+      console.error(err)
+      res.status(500).json({
+        error: "Failed to update project"
+      })
+    }
+  }
 }
