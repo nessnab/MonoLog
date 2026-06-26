@@ -1,8 +1,12 @@
 interface LogListProps {
   logs: any[]
+  onEditLog: (log: any) => void
 }
 
-function LogList({ logs }) {
+function LogList({ 
+  logs, 
+  onEditLog,
+ }: LogListProps) {
 
   return (
     <div>
@@ -11,6 +15,13 @@ function LogList({ logs }) {
       {logs.map((log) => (
         <div key={log.id}>
           {log.content}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEditLog(log);
+            }}>
+            Edit
+          </button>
         </div>
       ))}
     </div>

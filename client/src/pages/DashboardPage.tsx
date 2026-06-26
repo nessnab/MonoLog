@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import CreateMemberForm from '../components/MemberForm'
 import ProjectForm from '../components/ProjectForm'
+import LogForm from '../components/LogForm'
 
 import MemberList from '../components/MemberList'
 import ProjectList from '../components/ProjectList'
@@ -27,9 +28,10 @@ function DashboardPage() {
   const [selectedProject, setSelectedProject] = useState<any>(null)
 
   const [editingProjectId, setEditingProjectId] = useState<number | null>(null)
-
+  
   const [logs, setLogs] = useState<any[]>([])
   const [content, setContent] = useState("")
+  const [editingLogId, setEditingLogId] = useState<number | null>(null)
 
   useEffect(() => {
   if (!user) return;
@@ -143,7 +145,7 @@ function DashboardPage() {
     }
   }
 
-  // Update project
+  // Edit btn project
   const handleEditProject = (project: any) => {
     setEditingProjectId(project.id);
     setProjectName(project.name);
@@ -152,36 +154,68 @@ function DashboardPage() {
 
 
   // Create logs
-  const handleCreateLog = async () => {
+  const handleSubmitLog = async () => {
     if (!selectedProject) {
       alert("select a project first");
       return
     }
 
     try {
-      const res = await fetch(
-        "http://localhost:3000/logs",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            content,
-            projectId: selectedProject.id,
-          }),
-        }
-      )
-
-      const data = await res.json();
-      console.log(data);
-      setLogs((prev) => [data, ...prev]);
+      if (editingLogId) {
+        const res = await fetch(
+          `http://localhost:3000/logs/${editingLogId}`,
+          {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              content,
+            }),
+          }
+        );
+        const data = await res.json();
+        setLogs((prev) =>
+          prev.map((log) =>
+            log.id === data.id
+              ? data
+              : log
+          )
+        )  
+      } else {
+        const res = await fetch(
+          "http://localhost:3000/logs",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              content,
+              projectId: selectedProject.id,
+            }),
+          }
+        )
+  
+        const data = await res.json();
+        console.log(data);
+        setLogs((prev) => [data, ...prev]);
+      }
+      setEditingLogId(null)
       setContent((""))
     } catch (err) {
       console.error(err)
     }
   } 
+
+  // Edit btn log
+  const handleEditLog = (log: any) => {
+    setEditingLogId(log.id);
+    setContent(log.content);
+  }
+
 
   // Handle logout
   const handleLogout = async () => {
@@ -243,22 +277,16 @@ function DashboardPage() {
         onEditProject={handleEditProject}
       />
 
-      <div>
-        <h2>New Log</h2>
-
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="What did you work on today?"
-        />
-
-        <button onClick={handleCreateLog}>
-          Submit
-        </button>
-      </div>
+     <LogForm
+        content={content}
+        setContent={setContent}
+        handleSubmitLog={handleSubmitLog}
+        editingLogId={editingLogId}
+     />
       
       <LogList 
         logs={logs}
+        onEditLog={handleEditLog}
       />
 
       <button onClick={handleLogout}>

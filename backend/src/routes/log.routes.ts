@@ -9,5 +9,6 @@ const logController = new LogController();
 // router.get("/workspace/projects/:projectId/logs", authMiddleware, logController.getLogs);
 router.get("/workspace/:workspaceId/projects/:projectId/logs", authMiddleware, logController.getLogs);
 router.post("/logs", authMiddleware, logController.createLog);
+router.put("/logs/:logId", authMiddleware, logController.updateLog);
 
 export default router;
