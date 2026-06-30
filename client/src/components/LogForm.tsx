@@ -14,7 +14,7 @@ function LogForm({
 }: LogFormProps) {
 
   return (
-     <div>
+     <div className="">
         <h2>New Log</h2>
 
         <textarea

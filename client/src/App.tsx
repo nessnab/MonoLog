@@ -9,7 +9,6 @@ import './App.css'
 function App() {
 
   return (
-    <body className='bg-background'>
     <BrowserRouter>
       <Routes>
         <Route path="/auth" element={<AuthPage />} />
@@ -19,7 +18,6 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-    </body>
   )
 }
 

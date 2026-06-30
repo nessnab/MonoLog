@@ -19,7 +19,7 @@ function ProjectForm({
 }: ProjectFormProps) {
 
   return (
-        <div>
+    <div className="">
       <h2>Create Project</h2>
 
       <input

@@ -1,22 +1,20 @@
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import CreateMemberForm from '../components/MemberForm'
-import ProjectForm from '../components/ProjectForm'
+import ProjectForm from '../components/project/ProjectForm'
 import LogForm from '../components/LogForm'
 
 import MemberList from '../components/MemberList'
-import ProjectList from '../components/ProjectList'
+import ProjectList from '../components/project/ProjectList'
 import LogList from '../components/LogList'
 
-import { CircleUser } from 'lucide-react'
+//UI
+import DashboardStat from '../components/dashboard/DashboardStat'
+import ProjectSection from '../components/project/ProjectSection'
 
 function DashboardPage() {
-  interface Project {
-    id: number
-    name: string
-    description?: string
-  }
+  
 
   const navigate = useNavigate()
   
@@ -24,13 +22,9 @@ function DashboardPage() {
   const [members, setMembers] = useState([]);
   const [workspace, setWorkspace] = useState(null)
 
-  const [projectName, setProjectName] = useState("")
-  const [projectDesc, setProjectDesc] = useState("")
-
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<any>(null)
 
-  const [editingProjectId, setEditingProjectId] = useState<number | null>(null)
   
   const [logs, setLogs] = useState<any[]>([])
   const [content, setContent] = useState("")
@@ -111,67 +105,7 @@ function DashboardPage() {
 
   // // Create Project for admin
 
-  const handleSubmitProject = async () => {
-    try {
-      if (editingProjectId) {
-        // EDIT
-        const res = await fetch(
-          `http://localhost:3000/projects/${editingProjectId}`,
-          {
-            method: "PUT",
-            credentials: "include",
-            headers: {
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-              name: projectName,
-              description: projectDesc,
-            }),
-          }
-        );
-        const data = await res.json()
-        setProjects((prev) =>
-          prev.map((project) =>
-            project.id === data.id
-              ? data
-              : project
-          )
-        )
-      } else {
-        const res = await fetch(
-          "http://localhost:3000/projects",
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-              name: projectName,
-              description: projectDesc,
-              workspaceId: user.workspaceId,
-            }),
-          }
-        );
-        const data = await res.json()
-        setProjects((prev) => [...prev, data])
-      }
 
-      setEditingProjectId(null)
-      setProjectName((""))
-      setProjectDesc((""))
-    }
-    catch (err) {
-      console.error(err)
-    }
-  }
-
-  // Edit btn project
-  const handleEditProject = (project: any) => {
-    setEditingProjectId(project.id);
-    setProjectName(project.name);
-    setProjectDesc(project.description);
-  }
 
 
   // Create logs
@@ -257,7 +191,7 @@ function DashboardPage() {
   }
 
   return (
-    <div className='font-sans'>
+    <div className='font-sans p-4'>
       <aside className='fixed top-0 left-0 z-40 w-55 h-full transition-transform -translate-x-full sm:translate-x-0 bg-background-side'>
         <div className='h-full px-3 py-4 overflow-y-auto border-e border-default'>
           <h2 className='font-extrabold text-text-white text-2xl'>MonoLog</h2>
@@ -292,38 +226,36 @@ function DashboardPage() {
 
       <div className='p-4 sm:ml-55'>
 
-        {user && 
-          <div>
-            <h2 className='text-xl font-bold'>Dashboard</h2>
-            <p>Welcome back, <span className='text-primary capitalize'>{user?.name}!</span></p>
-            
-            <div className='flex w-full gap-3'>
+        <DashboardStat
+            user={user}
+            members={members}
+        />
 
-              <div className='flex py-3 rounded-xl bg-surface shadow-sm border border-border w-1/4 items-center justify-between'>
-                <div className='ml-2'>
-                  <p className='text-sm mb-2 max-w-lg'>Your Role</p>
-                  <p className='text-md font-bold text-primary capitalize'>{user?.role}</p>
-                </div>
-                <div className='bg-success-light p-2 rounded-md mr-2 text-success'>
-                  <CircleUser />
-                </div>
-              </div>
+        <ProjectSection
+          user={user}
+          projects={projects}
+          setProjects={setProjects}
+          selectedProject={selectedProject}
+          setSelectedProject={setSelectedProject}
+      />
+        {/* <div className='flex w-full gap-3 mt-5'> */}
 
-              <div className='flex py-3 rounded-xl bg-surface shadow-sm border border-border w-1/4 items-center justify-between'>
-                <div className='ml-2'>
-                  <p className='text-sm mb-2 max-w-lg'>Total Members</p>
-                  <p className='text-md font-bold text-primary capitalize'>
-                    {/* {user?.workspaceId} */}
-                  </p>
-                </div>
-                <div className='bg-success-light p-2 rounded-md mr-2 text-success'>
-                  <CircleUser />
-                </div>
-              </div>
+          {/* <ProjectForm
+            projectName={projectName}
+            projectDesc={projectDesc}
+            setProjectName={setProjectName}
+            setProjectDesc={setProjectDesc}
+            handleSubmitProject={handleSubmitProject}
+            editingProjectId={editingProjectId}
+          /> */}
+          <LogForm
+              content={content}
+              setContent={setContent}
+              handleSubmitLog={handleSubmitLog}
+              editingLogId={editingLogId}
+          />
+        {/* </div> */}
 
-            </div>
-          </div>
-        }
 
         {user?.role === "admin" && (
           <div>
@@ -336,34 +268,19 @@ function DashboardPage() {
         )}
 
         <MemberList members={members} />
-        <ProjectForm
-          projectName={projectName}
-          projectDesc={projectDesc}
-          setProjectName={setProjectName}
-          setProjectDesc={setProjectDesc}
-          handleSubmitProject={handleSubmitProject}
-          editingProjectId={editingProjectId}
-        />
 
-        <ProjectList 
+        {/* <ProjectList 
           projects={projects}
           selectedProject={selectedProject}
           onSelectProject={setSelectedProject}
           onEditProject={handleEditProject}
-        />
+        /> */}
 
-      <LogForm
-          content={content}
-          setContent={setContent}
-          handleSubmitLog={handleSubmitLog}
-          editingLogId={editingLogId}
-      />
         
         <LogList 
           logs={logs}
           onEditLog={handleEditLog}
         />
-
 
       </div>
     </div>
