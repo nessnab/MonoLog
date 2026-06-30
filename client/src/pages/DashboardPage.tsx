@@ -9,6 +9,8 @@ import MemberList from '../components/MemberList'
 import ProjectList from '../components/ProjectList'
 import LogList from '../components/LogList'
 
+import { CircleUser } from 'lucide-react'
+
 function DashboardPage() {
   interface Project {
     id: number
@@ -54,7 +56,9 @@ function DashboardPage() {
       credentials: 'include',
     })
       .then(response => response.json())
-      .then(data => setUser(data))
+      .then(data => {
+        setUser(data)
+      })
   }, [])
 
   useEffect(() => {
@@ -236,63 +240,111 @@ function DashboardPage() {
   }
 
   return (
-    <div>
-      Dashboard Page
+    <div className='font-sans'>
+      <aside className='fixed top-0 left-0 z-40 w-55 h-full transition-transform -translate-x-full sm:translate-x-0 bg-background-side'>
+        <div className='h-full px-3 py-4 overflow-y-auto border-e border-default'>
+          <h2 className='font-extrabold text-text-white text-2xl'>MonoLog</h2>
+            <ul className='space-x-md text-text-white mt-10'>
+              <p className='text-text-muted text-sm'>MAIN</p>
+              <li>
+                <a href="#" className="flex items-center px-2 py-1.5 rounded-md hover:bg-primary transition-all duration-200">
+               <span>Dashboard</span>
+                </a>
+              </li>
+              <li>
+                <div className="flex items-center px-2 py-1.5 rounded-md hover:bg-primary transition-all duration-200">
+                <p>Workspace: {user?.workspaceId}</p>
+                </div>
+              </li>
 
-      <div>
+              <li>
+                <button className='flex items-center px-2 py-1.5 text-body rounded-base'
+                  onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+
+            </ul>
+        </div>
+
+      </aside>
+
+      <div className='p-4 sm:ml-55'>
+
         {user && 
-        <div>
-          <h2>User Information</h2>
-          <p>Welcome, {user?.name}!</p>
-          <p>Role: {user?.role}</p>
-          <p>Workspace: {user?.workspaceId}</p>
-        </div>
+          <div>
+            <h2 className='text-xl font-bold'>Dashboard</h2>
+            <p>Welcome back, <span className='text-primary capitalize'>{user?.name}!</span></p>
+            
+            <div className='flex w-full gap-3'>
+
+              <div className='flex py-3 rounded-xl bg-surface shadow-sm border border-border w-1/4 items-center justify-between'>
+                <div className='ml-2'>
+                  <p className='text-sm mb-2 max-w-lg'>Your Role</p>
+                  <p className='text-md font-bold text-primary capitalize'>{user?.role}</p>
+                </div>
+                <div className='bg-success-light p-2 rounded-md mr-2 text-success'>
+                  <CircleUser />
+                </div>
+              </div>
+
+              <div className='flex py-3 rounded-xl bg-surface shadow-sm border border-border w-1/4 items-center justify-between'>
+                <div className='ml-2'>
+                  <p className='text-sm mb-2 max-w-lg'>Total Members</p>
+                  <p className='text-md font-bold text-primary capitalize'>
+                    {/* {user?.workspaceId} */}
+                  </p>
+                </div>
+                <div className='bg-success-light p-2 rounded-md mr-2 text-success'>
+                  <CircleUser />
+                </div>
+              </div>
+
+            </div>
+          </div>
         }
+
+        {user?.role === "admin" && (
+          <div>
+            <h2>Create Member</h2>
+            <CreateMemberForm
+              workspaceId={user?.workspaceId}
+              // onMemberCreated={fetchMembers}
+            />
+          </div>
+        )}
+
+        <MemberList members={members} />
+        <ProjectForm
+          projectName={projectName}
+          projectDesc={projectDesc}
+          setProjectName={setProjectName}
+          setProjectDesc={setProjectDesc}
+          handleSubmitProject={handleSubmitProject}
+          editingProjectId={editingProjectId}
+        />
+
+        <ProjectList 
+          projects={projects}
+          selectedProject={selectedProject}
+          onSelectProject={setSelectedProject}
+          onEditProject={handleEditProject}
+        />
+
+      <LogForm
+          content={content}
+          setContent={setContent}
+          handleSubmitLog={handleSubmitLog}
+          editingLogId={editingLogId}
+      />
+        
+        <LogList 
+          logs={logs}
+          onEditLog={handleEditLog}
+        />
+
+
       </div>
-
-      {user?.role === "admin" && (
-        <div>
-          <h2>Create Member</h2>
-          <CreateMemberForm
-            workspaceId={user?.workspaceId}
-            // onMemberCreated={fetchMembers}
-          />
-        </div>
-      )}
-
-      <MemberList members={members} />
-      <ProjectForm
-        projectName={projectName}
-        projectDesc={projectDesc}
-        setProjectName={setProjectName}
-        setProjectDesc={setProjectDesc}
-        handleSubmitProject={handleSubmitProject}
-        editingProjectId={editingProjectId}
-      />
-
-      <ProjectList 
-        projects={projects}
-        selectedProject={selectedProject}
-        onSelectProject={setSelectedProject}
-        onEditProject={handleEditProject}
-      />
-
-     <LogForm
-        content={content}
-        setContent={setContent}
-        handleSubmitLog={handleSubmitLog}
-        editingLogId={editingLogId}
-     />
-      
-      <LogList 
-        logs={logs}
-        onEditLog={handleEditLog}
-      />
-
-      <button onClick={handleLogout}>
-        Logout
-      </button>
-      
     </div>
   )
 }
