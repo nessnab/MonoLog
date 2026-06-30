@@ -1,3 +1,5 @@
+import { PencilLine } from 'lucide-react'
+
 interface ProjectListProps {
   projects: any[]
   selectedProject: any
@@ -7,29 +9,43 @@ interface ProjectListProps {
 
 function ProjectList({
   projects,
-  // selectedProjects,
+  selectedProject,
   onSelectProject,
   onEditProject
 }: ProjectListProps) {
 
   return (
-    <div>
-      <h2>Projects</h2>
+    <div className="h-64 overflow-y-auto items-center rounded-xl border border-border bg-surface shadow-sm p-4">
+      <h2 className="font-bold text-base">Projects</h2>
 
         {projects.map((project) => (
           <div
             key={project.id}
             onClick={() => onSelectProject(project)}
-            style={{cursor: 'pointer'}}
+            className={`
+              flex items-center justify-between rounded-sm ml-1 my-1 py-2 px-2 cursor-pointer transition
+
+                ${
+                  selectedProject?.id === project.id
+                      ? "bg-primary-light border-l-4 border-primary"
+                      : "bg-surface hover:bg-primary-light"
+                }
+            `}
+            
           >
-            {project.name}
-            <button
+            <div>
+              <p className="capitalize font-semibold">{project.name}</p>
+              <p>{project.description}</p>
+            </div>
+
+            <button className='cursor-pointer'
               onClick={(e) => {
                 e.stopPropagation();
                 onEditProject(project)
               }}>
-              Edit
+              <PencilLine size={18} />
             </button>
+
           </div>
         ))}
     </div>

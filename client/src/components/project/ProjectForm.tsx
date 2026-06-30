@@ -9,6 +9,9 @@ interface ProjectFormProps {
   handleSubmitProject: () => void;
 }
 
+import Input from '../ui/Input'
+import Button from '../ui/Button'
+
 function ProjectForm({
   editingProjectId,
   projectName,
@@ -19,32 +22,28 @@ function ProjectForm({
 }: ProjectFormProps) {
 
   return (
-    <div className="">
-      <h2>Create Project</h2>
+    <div className="items-center rounded-xl border border-border bg-surface shadow-sm p-4">
+      <h2 className='font-bold text-base'>Create New Project</h2>
 
-      <input
-        type="text"
-        placeholder="Project Name"
+      <label>Project Name</label>
+      <Input
         value={projectName}
-        onChange={(e) =>
-          setProjectName(e.target.value)
-        }
+        placeholder="Enter project name"
+        onChange={setProjectName}
       />
 
-      <input
-        type="text"
-        placeholder="Project Description"
+      <label>Description (optional)</label>
+      <Input
         value={projectDesc}
-        onChange={(e) =>
-          setProjectDesc(e.target.value)
-        }
+        placeholder="Enter project description"
+        onChange={setProjectDesc}
       />
 
-      <button onClick={handleSubmitProject}>
+      <Button onClick={handleSubmitProject}>
         {editingProjectId
           ? "Update Project"
           : "Create Project"}
-      </button>
+      </Button>
     </div>
   )
 }

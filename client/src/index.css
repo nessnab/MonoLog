@@ -6,9 +6,9 @@
   ========================= */
   
   /* Brand */
-  --color-primary: #4F46E5;
+  --color-primary: #675aec;
   --color-primary-hover: #4338CA;
-  --color-primary-light: #EEF2FF;
+  --color-primary-light: #e7ddff;
 
   /* Accent */
   --color-accent: #06B6D4;
@@ -26,10 +26,10 @@
   --color-danger-light: #FEE2E2;
   
   /* Background */
-  --color-background: #F1F5F9;
-  --color-background-side: #152238;
-  --color-background-side-secondary: #192841;
-  --color-surface: #FFFFFF;
+  --color-background: #f9fafc;
+  --color-background-side: #0f1729;
+  --color-background-side-secondary: #172135;
+  --color-surface: #fefefe;
   --color-surface-hover: #F1F5F9;
   
   /* Borders */
@@ -63,6 +63,7 @@
   html {
     font-family: var(--font-sans);
     background-color: var(--color-background);
+    size: var(--text-base);
     color: var(--color-text);
     transition: var(--transition-slow);
   }

@@ -2,11 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import CreateMemberForm from '../components/MemberForm'
-import ProjectForm from '../components/project/ProjectForm'
 import LogForm from '../components/LogForm'
 
 import MemberList from '../components/MemberList'
-import ProjectList from '../components/project/ProjectList'
 import LogList from '../components/LogList'
 
 //UI

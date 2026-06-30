@@ -102,7 +102,7 @@ function ProjectSection({
   }
 
   return (
-      <div className="flex w-full gap-3 mt-5">
+      <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
         
         <ProjectForm
             projectName={projectName}
