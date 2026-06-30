@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import CreateMemberForm from '../components/MemberForm'
@@ -22,6 +22,7 @@ function DashboardPage() {
   
   const [user, setUser] = useState(null)
   const [members, setMembers] = useState([]);
+  const [workspace, setWorkspace] = useState(null)
 
   const [projectName, setProjectName] = useState("")
   const [projectDesc, setProjectDesc] = useState("")
@@ -35,6 +36,29 @@ function DashboardPage() {
   const [content, setContent] = useState("")
   const [editingLogId, setEditingLogId] = useState<number | null>(null)
 
+  // USER
+  useEffect(() => {
+      fetch('http://localhost:3000/auth/me', {
+        credentials: 'include',
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log("user:", data)
+          setUser(data)
+        })
+  }, [])
+
+  // WORKSPACE
+  useEffect(() => {
+    fetch(`http://localhost:3000/workspace/`, {
+      credentials: "include",
+    })
+      .then(response => response.json())
+      .then(data => {
+        setWorkspace(data)
+      })
+  }, [])
+// MEMBER
   useEffect(() => {
   if (!user) return;
 
@@ -51,16 +75,8 @@ function DashboardPage() {
     });
   }, [user]);
 
-  useEffect(() => {
-    fetch('http://localhost:3000/auth/me', {
-      credentials: 'include',
-    })
-      .then(response => response.json())
-      .then(data => {
-        setUser(data)
-      })
-  }, [])
 
+  // PROJECT
   useEffect(() => {
   if (!user) return;
 
@@ -77,6 +93,7 @@ function DashboardPage() {
     });
   }, [user]);
 
+  // LOGS
   useEffect(() => {
     if (!selectedProject || !user) return;
     fetch(
@@ -245,26 +262,30 @@ function DashboardPage() {
         <div className='h-full px-3 py-4 overflow-y-auto border-e border-default'>
           <h2 className='font-extrabold text-text-white text-2xl'>MonoLog</h2>
             <ul className='space-x-md text-text-white mt-10'>
-              <p className='text-text-muted text-sm'>MAIN</p>
+              <p className='text-text-muted text-xs'>MAIN</p>
+
               <li>
                 <a href="#" className="flex items-center px-2 py-1.5 rounded-md hover:bg-primary transition-all duration-200">
                <span>Dashboard</span>
                 </a>
               </li>
+              
+              <p className='text-text-muted text-xs mt-5'>WORKSPACE</p>
               <li>
-                <div className="flex items-center px-2 py-1.5 rounded-md hover:bg-primary transition-all duration-200">
-                <p>Workspace: {user?.workspaceId}</p>
+                <div className="items-center px-2 py-1.5 rounded-md bg-background-side-secondary">
+                  <p>{workspace?.name}</p>
+                  {/* <p className='text-sm text-text-muted'>Workspace</p> */}
                 </div>
               </li>
 
-              <li>
-                <button className='flex items-center px-2 py-1.5 text-body rounded-base'
-                  onClick={handleLogout}>
-                  Logout
-                </button>
-              </li>
 
             </ul>
+            <div className='fixed bottom-0 text-text-white mb-10'>
+              <button className='flex items-center px-2 py-1.5 text-body rounded-base'
+                  onClick={handleLogout}>
+                  Logout
+              </button>
+            </div>
         </div>
 
       </aside>
