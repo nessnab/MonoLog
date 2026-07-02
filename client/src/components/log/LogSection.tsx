@@ -102,15 +102,15 @@ function LogSection({
 
   return (
     <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
+      <LogList
+        logs={logs}
+        onEditLog={handleEditLog}
+      />
       <LogForm
         content={content}
         setContent={setContent}
         handleSubmitLog={handleSubmitLog}
         editingLogId={editingLogId}
-      />
-      <LogList
-        logs={logs}
-        onEditLog={handleEditLog}
       />
 
     </div>

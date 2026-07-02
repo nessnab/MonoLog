@@ -103,7 +103,13 @@ function ProjectSection({
 
   return (
       <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
-        
+        <ProjectList 
+          projects={projects}
+          selectedProject={selectedProject}
+          onSelectProject={setSelectedProject}
+          onEditProject={handleEditProject}
+        />
+        {user && user.role === "admin" && (
         <ProjectForm
             projectName={projectName}
             projectDesc={projectDesc}
@@ -112,13 +118,8 @@ function ProjectSection({
             handleSubmitProject={handleSubmitProject}
             editingProjectId={editingProjectId}
           />
+        )}
 
-        <ProjectList 
-          projects={projects}
-          selectedProject={selectedProject}
-          onSelectProject={setSelectedProject}
-          onEditProject={handleEditProject}
-        />
       </div>
   )
 }

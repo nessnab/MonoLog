@@ -25,14 +25,14 @@ function ProjectForm({
     <div className="items-center rounded-xl border border-border bg-surface shadow-sm p-4">
       <h2 className='font-bold text-base'>Create New Project</h2>
 
-      <label>Project Name</label>
+      <label className="my-1 block">Project Name</label>
       <Input
         value={projectName}
         placeholder="Enter project name"
         onChange={setProjectName}
       />
 
-      <label>Description (optional)</label>
+      <label className="my-1 block">Description (optional)</label>
       <Input
         value={projectDesc}
         placeholder="Enter project description"

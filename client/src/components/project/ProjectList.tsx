@@ -15,7 +15,7 @@ function ProjectList({
 }: ProjectListProps) {
 
   return (
-    <div className="h-64 overflow-y-auto items-center rounded-xl border border-border bg-surface shadow-sm p-4">
+    <div className="h-62 overflow-y-auto items-center rounded-xl border border-border bg-surface shadow-sm p-4">
       <h2 className="font-bold text-base">Projects</h2>
 
         {projects.map((project) => (
