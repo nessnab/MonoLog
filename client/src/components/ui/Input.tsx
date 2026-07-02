@@ -21,7 +21,6 @@ function Input({
         rounded-md
         border
         border-border
-        bg-white
         px-4
         py-2
         focus:border-primary

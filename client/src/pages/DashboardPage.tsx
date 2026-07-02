@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import CreateMemberForm from '../components/MemberForm'
-import LogForm from '../components/LogForm'
-
 import MemberList from '../components/MemberList'
-import LogList from '../components/LogList'
 
 //UI
 import DashboardStat from '../components/dashboard/DashboardStat'
 import ProjectSection from '../components/project/ProjectSection'
+import LogSection from '../components/log/LogSection'
 
 function DashboardPage() {
   
@@ -22,11 +20,8 @@ function DashboardPage() {
 
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<any>(null)
-
   
   const [logs, setLogs] = useState<any[]>([])
-  const [content, setContent] = useState("")
-  const [editingLogId, setEditingLogId] = useState<number | null>(null)
 
   // USER
   useEffect(() => {
@@ -101,74 +96,6 @@ function DashboardPage() {
       })
   }, [selectedProject, user])
 
-  // // Create Project for admin
-
-
-
-
-  // Create logs
-  const handleSubmitLog = async () => {
-    if (!selectedProject) {
-      alert("select a project first");
-      return
-    }
-
-    try {
-      if (editingLogId) {
-        const res = await fetch(
-          `http://localhost:3000/logs/${editingLogId}`,
-          {
-            method: "PUT",
-            credentials: "include",
-            headers: {
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-              content,
-            }),
-          }
-        );
-        const data = await res.json();
-        setLogs((prev) =>
-          prev.map((log) =>
-            log.id === data.id
-              ? data
-              : log
-          )
-        )  
-      } else {
-        const res = await fetch(
-          "http://localhost:3000/logs",
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-              content,
-              projectId: selectedProject.id,
-            }),
-          }
-        )
-  
-        const data = await res.json();
-        console.log(data);
-        setLogs((prev) => [data, ...prev]);
-      }
-      setEditingLogId(null)
-      setContent((""))
-    } catch (err) {
-      console.error(err)
-    }
-  } 
-
-  // Edit btn log
-  const handleEditLog = (log: any) => {
-    setEditingLogId(log.id);
-    setContent(log.content);
-  }
-
 
   // Handle logout
   const handleLogout = async () => {
@@ -235,25 +162,13 @@ function DashboardPage() {
           setProjects={setProjects}
           selectedProject={selectedProject}
           setSelectedProject={setSelectedProject}
-      />
-        {/* <div className='flex w-full gap-3 mt-5'> */}
-
-          {/* <ProjectForm
-            projectName={projectName}
-            projectDesc={projectDesc}
-            setProjectName={setProjectName}
-            setProjectDesc={setProjectDesc}
-            handleSubmitProject={handleSubmitProject}
-            editingProjectId={editingProjectId}
-          /> */}
-          <LogForm
-              content={content}
-              setContent={setContent}
-              handleSubmitLog={handleSubmitLog}
-              editingLogId={editingLogId}
-          />
-        {/* </div> */}
-
+        />
+        <LogSection
+          // user={user}
+          selectedProject={selectedProject}
+          logs={logs}
+          setLogs={setLogs}
+        />
 
         {user?.role === "admin" && (
           <div>
@@ -266,19 +181,6 @@ function DashboardPage() {
         )}
 
         <MemberList members={members} />
-
-        {/* <ProjectList 
-          projects={projects}
-          selectedProject={selectedProject}
-          onSelectProject={setSelectedProject}
-          onEditProject={handleEditProject}
-        /> */}
-
-        
-        <LogList 
-          logs={logs}
-          onEditLog={handleEditLog}
-        />
 
       </div>
     </div>

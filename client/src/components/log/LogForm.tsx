@@ -6,6 +6,9 @@ interface LogFormProps {
   handleSubmitLog: () => void;
 }
 
+import Input from '../ui/Input'
+import Button from '../ui/Button'
+
 function LogForm({
   editingLogId,
   content,
@@ -14,18 +17,19 @@ function LogForm({
 }: LogFormProps) {
 
   return (
-     <div className="">
-        <h2>New Log</h2>
+     <div className="items-center rounded-xl border border-border bg-surface shadow-sm p-4">
+        <h2 className="font-bold text-base">New Log</h2>
 
         <textarea
+          className="text-sm my-1 w-full rounded-md border border-border px-4 py-3 focus:border-primary focus:outline-none"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="What did you work on today?"
         />
 
-        <button onClick={handleSubmitLog}>
+        <Button onClick={handleSubmitLog}>
           {editingLogId ? "Edit Log" : "Submit Log"}
-        </button>
+        </Button>
       </div>
   )
 }
