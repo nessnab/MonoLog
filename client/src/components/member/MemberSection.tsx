@@ -2,21 +2,14 @@ interface MemberSectionProps {
   members: any[];
   user: any;
   workspaceId: number | null;
-  onMemberCreated: () => void;
+  refreshMembers: () => void;
 }
 
-
-// import type { AnyCaaRecord } from "node:dns";
 import MemberForm from "./MemberForm";
 import MemberList from "./MemberList";
 
-function MemberSection({ members, user, workspaceId, onMemberCreated }: MemberSectionProps) {
+function MemberSection({ members, user, workspaceId, refreshMembers }: MemberSectionProps) {
 
-  const refreshMembers = async () => {
-    
-  }
-
-console.log(user, workspaceId)
   return (
     <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
       <MemberList members={members} />
@@ -25,7 +18,7 @@ console.log(user, workspaceId)
           <h2>Create Member</h2>
             <MemberForm 
               workspaceId={user?.workspaceId} 
-              onMemberCreated={refreshMembers}
+              refreshMembers={refreshMembers}
             />
         </div>
       )} 

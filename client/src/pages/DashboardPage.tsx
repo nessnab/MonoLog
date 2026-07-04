@@ -43,21 +43,30 @@ function DashboardPage() {
         setWorkspace(data)
       })
   }, [])
-// MEMBER
-  useEffect(() => {
-  if (!user) return;
 
-  fetch(
-    `http://localhost:3000/workspace/${user.workspaceId}/users`,
-    {
-      credentials: "include",
-    }
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("members", data);
+// MEMBER
+  const fetchMembers = async () => {
+    if (!user) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:3000/workspace/${user.workspaceId}/users`,
+        {
+          credentials: "include",
+        }
+      )
+
+      const data = await res.json();
       setMembers(data);
-    });
+    }
+    catch (err) {
+      console.error(err)
+    }
+  
+  }
+
+  useEffect(() => {
+    fetchMembers()
   }, [user]);
 
 
@@ -171,10 +180,7 @@ function DashboardPage() {
         <MemberSection 
           user={user}
           members={members}
-          // user={user}
-          // setUser={setUser}
-          // workspace={workspace}
-          // setWorkspace={setWorkspace}
+          refreshMembers={fetchMembers}
         />
 
         {/* {user?.role === "admin" && (

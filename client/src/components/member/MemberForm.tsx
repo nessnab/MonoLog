@@ -1,13 +1,13 @@
 interface MemberFormProps {
-  workspaceId: number;
-  onMemberCreated: () => void;
+  workspaceId: number | null;
+  refreshMembers: () => void;
 }
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Input from '../ui/Input'
 
-function MemberForm({ workspaceId, onMemberCreated }: MemberFormProps) {
+function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -34,7 +34,7 @@ function MemberForm({ workspaceId, onMemberCreated }: MemberFormProps) {
         return
       }
 
-      onMemberCreated();
+      refreshMembers();
       navigate('/');
     }
     catch (err) {

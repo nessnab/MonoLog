@@ -12,6 +12,8 @@ type Props = {
 export default function MemberList({
   members,
 }: Props) {
+  console.log(members);
+console.log(Array.isArray(members));
   return (
     <div>
 
