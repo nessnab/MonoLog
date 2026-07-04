@@ -1,7 +1,13 @@
+interface MemberFormProps {
+  workspaceId: number;
+  onMemberCreated: () => void;
+}
+
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Input from '../ui/Input'
 
-function CreateMemberForm() {
+function MemberForm({ workspaceId, onMemberCreated }: MemberFormProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,7 +25,7 @@ function CreateMemberForm() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, email, password, workspaceId })
       })
       const data = await response.json()
 
@@ -28,6 +34,7 @@ function CreateMemberForm() {
         return
       }
 
+      onMemberCreated();
       navigate('/');
     }
     catch (err) {
@@ -37,8 +44,12 @@ function CreateMemberForm() {
   }
 
   return (
-    <div>
+    <div className="items-center rounded-xl border border-border bg-surface shadow-sm p-4">
       <form action="" onSubmit={handleSubmit}>
+        {/* <Input 
+        /> */}
+
+
         <input 
           type="text" 
           id="name" 
@@ -71,4 +82,4 @@ function CreateMemberForm() {
   )
 }
 
-export default CreateMemberForm
+export default MemberForm

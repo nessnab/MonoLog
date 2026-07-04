@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import CreateMemberForm from '../components/MemberForm'
-import MemberList from '../components/MemberList'
-
 //UI
 import DashboardStat from '../components/dashboard/DashboardStat'
 import ProjectSection from '../components/project/ProjectSection'
 import LogSection from '../components/log/LogSection'
+import MemberSection from '../components/member/MemberSection'
 
 function DashboardPage() {
   
@@ -170,7 +168,16 @@ function DashboardPage() {
           setLogs={setLogs}
         />
 
-        {user?.role === "admin" && (
+        <MemberSection 
+          user={user}
+          members={members}
+          // user={user}
+          // setUser={setUser}
+          // workspace={workspace}
+          // setWorkspace={setWorkspace}
+        />
+
+        {/* {user?.role === "admin" && (
           <div>
             <h2>Create Member</h2>
             <CreateMemberForm
@@ -180,7 +187,7 @@ function DashboardPage() {
           </div>
         )}
 
-        <MemberList members={members} />
+        <MemberList members={members} /> */}
 
       </div>
     </div>
