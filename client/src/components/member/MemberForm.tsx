@@ -6,6 +6,7 @@ interface MemberFormProps {
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Input from '../ui/Input'
+import Button from '../ui/Button'
 
 function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
   const [name, setName] = useState('')
@@ -35,7 +36,9 @@ function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
       }
 
       refreshMembers();
-      navigate('/');
+      setName((""))
+      setEmail((""))
+      setPassword((""))
     }
     catch (err) {
       console.error('Error during login:', err)
@@ -45,38 +48,37 @@ function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
 
   return (
     <div className="items-center rounded-xl border border-border bg-surface shadow-sm p-4">
+      <h2 className='font-bold text-base'>New Member</h2>
+
       <form action="" onSubmit={handleSubmit}>
-        {/* <Input 
-        /> */}
 
-
-        <input 
-          type="text" 
-          id="name" 
-          name="name" 
+        <Input 
+          // type="text" 
+          // id="name" 
+          // name="name" 
           placeholder="Enter your name" 
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={setName}
         />
-        <input 
-          type="text" 
-          id="email" 
-          name="email" 
+        <Input 
+          // type="text" 
+          // id="email" 
+          // name="email" 
           placeholder="Enter your email" 
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={setEmail}
         />
-        <input 
-          type="password" 
-          id="password" 
-          name="password" 
+        <Input 
+          // type="password" 
+          // id="password" 
+          // name="password" 
           placeholder="Enter your password" 
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={setPassword}
           />
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Create Member</button>
+        <Button type="submit">Add Member</Button>
       </form>
     </div>
   )
