@@ -81,7 +81,7 @@ function ProjectSection({
             body: JSON.stringify({
               name: projectName,
               description: projectDesc,
-              workspaceId: user.workspaceId,
+              workspaceId: user?.workspaceId,
             }),
           }
         );

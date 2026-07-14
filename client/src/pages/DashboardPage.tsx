@@ -1,3 +1,20 @@
+interface Workspace {
+  name: string;
+}
+
+interface Project {
+    id: number;
+    name: string;
+    description?: string;
+}
+
+interface User {
+    id: number;
+    name: string;
+    role: string;
+    workspaceId: number;
+}
+
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,9 +29,9 @@ function DashboardPage() {
 
   const navigate = useNavigate()
   
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null)
   const [members, setMembers] = useState([]);
-  const [workspace, setWorkspace] = useState(null)
+  const [workspace, setWorkspace] = useState<Workspace | null>(null)
 
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProject, setSelectedProject] = useState<any>(null)

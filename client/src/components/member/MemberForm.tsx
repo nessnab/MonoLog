@@ -4,7 +4,6 @@ interface MemberFormProps {
 }
 
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Input from '../ui/Input'
 import Button from '../ui/Button'
 
@@ -14,9 +13,8 @@ function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
   const [password, setPassword] = useState('')
 
   const [error, setError] = useState(null)
-  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
   if (

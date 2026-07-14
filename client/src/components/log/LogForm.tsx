@@ -6,7 +6,6 @@ interface LogFormProps {
   handleSubmitLog: () => void;
 }
 
-import Input from '../ui/Input'
 import Button from '../ui/Button'
 
 function LogForm({

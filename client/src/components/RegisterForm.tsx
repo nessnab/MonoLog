@@ -10,7 +10,7 @@ function RegisterForm() {
   const [error, setError] = useState(null)
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {

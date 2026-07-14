@@ -42,7 +42,7 @@ export class LogController {
               error: "Log content is required",
           });
       }
-      const userId = req.user.id
+      const userId = req?.user?.id
       const log = await prisma.log.create({
         data: {
           content,
