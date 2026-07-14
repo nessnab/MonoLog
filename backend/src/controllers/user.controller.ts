@@ -8,7 +8,15 @@ export class UserController {
   async createUserAdmin(req: Request, res: Response) {
     try {
       const { name, email, password, workspaceName } = req.body;
-
+      if (
+          !name?.trim() ||
+          !email?.trim() ||
+          !password?.trim()
+      ) {
+          return res.status(400).json({
+              error: "Missing required fields",
+          });
+      }
       // Check if email is already in use
       const existingUser = await prisma.user.findUnique({
         where: { email },
@@ -71,6 +79,15 @@ export class UserController {
   async createUserMember(req: Request, res: Response) {
     try {
       const { name, email, password } = req.body;
+      if (
+          !name?.trim() ||
+          !email?.trim() ||
+          !password?.trim()
+      ) {
+          return res.status(400).json({
+              error: "Missing required fields",
+          });
+      }
       const workspaceId = req.user?.workspaceId;
 
       // Check if email is already in use

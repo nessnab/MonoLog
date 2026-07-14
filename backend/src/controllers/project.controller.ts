@@ -40,6 +40,11 @@ export class ProjectController {
   async createProject(req: Request, res: Response) {
     try {
       const { name, description, workspaceId } = req.body;
+      if (!name?.trim()) {
+          return res.status(400).json({
+              error: "Project name is required",
+          });
+      }
       const project = await prisma.project.create({
         data: {
           name,
@@ -61,6 +66,11 @@ export class ProjectController {
     try {
       const { projectId } = req.params;
       const { name, description } = req.body;
+      if (!name?.trim()) {
+          return res.status(400).json({
+              error: "Project name is required",
+          });
+      }
 
       const project = await prisma.project.update({
         where: {

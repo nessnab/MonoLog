@@ -37,6 +37,11 @@ export class LogController {
   async createLog(req: Request, res: Response) {
     try {
       const { content, attachment, projectId } = req.body;
+      if (!content?.trim()) {
+          return res.status(400).json({
+              error: "Log content is required",
+          });
+      }
       const userId = req.user.id
       const log = await prisma.log.create({
         data: {

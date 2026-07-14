@@ -19,6 +19,15 @@ function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+  if (
+      !name.trim() ||
+      !email.trim() ||
+      !password.trim()
+  ) {
+      alert("Please fill all required fields.");
+      return;
+  }
+
     try {
       const response = await fetch('http://localhost:3000/member', {
         method: 'POST',

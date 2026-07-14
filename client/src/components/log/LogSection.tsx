@@ -43,6 +43,10 @@ function LogSection({
       alert("select a project first");
       return
     }
+    if (!content.trim()) {
+        alert("Log cannot be empty");
+        return;
+    }
 
     try {
       if (editingLogId) {

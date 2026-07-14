@@ -41,6 +41,10 @@ function ProjectSection({
 
   const handleSubmitProject = async () => {
     try {
+      if (!projectName.trim()) {
+          alert("Project name is required");
+          return;
+      }
       if (editingProjectId) {
         // EDIT
         const res = await fetch(
