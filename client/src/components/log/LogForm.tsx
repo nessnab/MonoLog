@@ -28,7 +28,7 @@ function LogForm({
           placeholder="What did you work on today?"
         />
         {error && (
-          <p className="text-sm text-danger">
+          <p className="text-sm text-danger"> 
             {error}
           </p>
         )}

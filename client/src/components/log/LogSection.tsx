@@ -35,7 +35,7 @@ function LogSection({
   // Create logs
   const handleSubmitLog = async () => {
     if (!selectedProject) {
-      alert("select a project first");
+      setError("Select a project first");
       return
     }
     if (!content.trim()) {

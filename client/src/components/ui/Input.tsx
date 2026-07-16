@@ -1,16 +1,19 @@
-interface InputProps {
+interface InputProps  {
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
+  type?: string
 }
 
 function Input({
   value,
   placeholder,
   onChange,
+  type,
 }: InputProps) {
   return (
     <input
+      type={type}
       value={value}
       placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}

@@ -12,7 +12,7 @@ function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const [error, setError] = useState(null)
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -22,7 +22,7 @@ function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
       !email.trim() ||
       !password.trim()
   ) {
-      alert("Please fill all required fields.");
+      setError("Please fill all required fields.");
       return;
   }
 
@@ -60,25 +60,17 @@ function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
       <form action="" onSubmit={handleSubmit}>
 
         <Input 
-          // type="text" 
-          // id="name" 
-          // name="name" 
           placeholder="Enter your name" 
           value={name}
           onChange={setName}
         />
         <Input 
-          // type="text" 
-          // id="email" 
-          // name="email" 
           placeholder="Enter your email" 
           value={email}
           onChange={setEmail}
         />
         <Input 
-          // type="password" 
-          // id="password" 
-          // name="password" 
+          type="password"
           placeholder="Enter your password" 
           value={password}
           onChange={setPassword}
