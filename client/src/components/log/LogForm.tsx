@@ -2,6 +2,7 @@ interface LogFormProps {
   editingLogId: number | null;
   content: string;
   setContent: (value: string) => void;
+  error: any
 
   handleSubmitLog: () => void;
 }
@@ -11,6 +12,7 @@ import Button from '../ui/Button'
 function LogForm({
   editingLogId,
   content,
+  error,
   setContent,
   handleSubmitLog
 }: LogFormProps) {
@@ -25,7 +27,11 @@ function LogForm({
           onChange={(e) => setContent(e.target.value)}
           placeholder="What did you work on today?"
         />
-
+        {error && (
+          <p className="text-sm text-danger">
+            {error}
+          </p>
+        )}
         <Button onClick={handleSubmitLog}>
           {editingLogId ? "Edit Log" : "Submit Log"}
         </Button>

@@ -15,9 +15,6 @@ interface LogSectionProps {
   setLogs: React.Dispatch<
     React.SetStateAction<Log[]>
   >;
-  // setSelectedProject: React.Dispatch<
-  //   React.SetStateAction<Project | null>
-  // >;
 }
 
 import { useState } from "react";
@@ -29,12 +26,10 @@ function LogSection({
   selectedProject,
   logs,
   setLogs,
-  // setSelectedProject,
-  // onEditLog,
 }: LogSectionProps) {
 
-  // const [logs, setLogs] = useState<any[]>([])
   const [content, setContent] = useState("")
+  const [error, setError] = useState("");
   const [editingLogId, setEditingLogId] = useState<number | null>(null)
 
   // Create logs
@@ -44,8 +39,8 @@ function LogSection({
       return
     }
     if (!content.trim()) {
-        alert("Log cannot be empty");
-        return;
+      setError("Log can not be empty");
+      return;
     }
 
     try {
@@ -70,7 +65,11 @@ function LogSection({
               ? data
               : log
           )
-        )  
+        )
+        if (!res.ok) {
+          setError(data.error);
+          return;
+        } 
       } else {
         const res = await fetch(
           "http://localhost:3000/logs",
@@ -86,13 +85,17 @@ function LogSection({
             }),
           }
         )
-  
+        
         const data = await res.json();
-        console.log(data);
+        if (!res.ok) {
+          setError(data.error);
+          return;
+        } 
         setLogs((prev) => [data, ...prev]);
       }
       setEditingLogId(null)
       setContent((""))
+      setError((""))
     } catch (err) {
       console.error(err)
     }
@@ -112,6 +115,7 @@ function LogSection({
       />
       <LogForm
         content={content}
+        error={error}
         setContent={setContent}
         handleSubmitLog={handleSubmitLog}
         editingLogId={editingLogId}
