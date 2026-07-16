@@ -3,6 +3,8 @@ interface ProjectFormProps {
   projectName: string;
   projectDesc: string;
 
+  error: any
+
   setProjectName: (value: string) => void;
   setProjectDesc: (value: string) => void;
 
@@ -16,6 +18,7 @@ function ProjectForm({
   editingProjectId,
   projectName,
   projectDesc,
+  error,
   setProjectName,
   setProjectDesc,
   handleSubmitProject
@@ -38,7 +41,11 @@ function ProjectForm({
         placeholder="Enter project description"
         onChange={setProjectDesc}
       />
-
+      {error && (
+          <p className="text-sm text-danger">
+              {error}
+          </p>
+      )}
       <Button onClick={handleSubmitProject}>
         {editingProjectId
           ? "Update Project"

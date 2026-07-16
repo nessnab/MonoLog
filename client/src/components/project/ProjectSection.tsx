@@ -37,14 +37,18 @@ function ProjectSection({
 }: ProjectSectionProps) {
   const [projectName, setProjectName] = useState("")
   const [projectDesc, setProjectDesc] = useState("")
+  const [error, setError] = useState("");
   const [editingProjectId, setEditingProjectId] = useState<number | null>(null)
 
+  const name = projectName.trim();
+  
   const handleSubmitProject = async () => {
     try {
-      if (!projectName.trim()) {
-          alert("Project name is required");
+      if (!name) {
+          setError("Project name is required.");
           return;
       }
+      setError("");
       if (editingProjectId) {
         // EDIT
         const res = await fetch(
@@ -69,6 +73,10 @@ function ProjectSection({
               : project
           )
         )
+        if (!res.ok) {
+          setError(data.error);
+          return;
+        }
       } else {
         const res = await fetch(
           "http://localhost:3000/projects",
@@ -86,12 +94,17 @@ function ProjectSection({
           }
         );
         const data = await res.json()
+        if (!res.ok) {
+          setError(data.error);
+          return;
+        }
         setProjects((prev) => [...prev, data])
       }
 
       setEditingProjectId(null)
       setProjectName((""))
       setProjectDesc((""))
+      setError((""))
     }
     catch (err) {
       console.error(err)
@@ -119,6 +132,7 @@ function ProjectSection({
             projectDesc={projectDesc}
             setProjectName={setProjectName}
             setProjectDesc={setProjectDesc}
+            error={error}
             handleSubmitProject={handleSubmitProject}
             editingProjectId={editingProjectId}
           />

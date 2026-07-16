@@ -14,6 +14,7 @@ function Button({
       type={type}
       onClick={onClick}
       className="
+        cursor-pointer
         mt-2
         rounded-md
         bg-primary
