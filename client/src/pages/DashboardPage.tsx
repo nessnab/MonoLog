@@ -178,6 +178,7 @@ function DashboardPage() {
         <DashboardStat
             user={user}
             members={members}
+            projects={projects}
         />
 
         <ProjectSection

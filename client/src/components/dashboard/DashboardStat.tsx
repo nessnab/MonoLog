@@ -1,14 +1,21 @@
+interface Project {
+    id: number;
+    name: string;
+    description?: string;
+}
 interface DashboardStatProps {
   user: any;
   members: any[];
+  projects: Project[]
 }
 
 import Card from "../ui/Card";
-import { CircleUser } from 'lucide-react'
+import { Folders, UserRound, UsersRound } from 'lucide-react'
 
 function DashboardStat({
   user,
   members,
+  projects,
 }: DashboardStatProps) {
 
   return (
@@ -27,13 +34,19 @@ function DashboardStat({
                   <Card
                       title="Your Role"
                       value={user.role}
-                      icon={<CircleUser size={22} />}
+                      icon={<UserRound size={22} />}
                   />
     
                   <Card
                       title="Total Members"
                       value={members.length}
-                      icon={<CircleUser size={22} />}
+                      icon={<UsersRound size={22} />}
+                  />
+
+                  <Card
+                      title="Total Projects"
+                      value={projects.length}
+                      icon={<Folders size={22} />}
                   />
               </div>
         </div>
