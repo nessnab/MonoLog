@@ -51,10 +51,12 @@ export class AuthController {
         { expiresIn: "1d" }
       );
       res.cookie("token", token, {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: false,
-        maxAge: 24 * 3 * 60 * 60 * 1000,
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite:
+              process.env.NODE_ENV === "production"
+                  ? "none"
+                  : "lax",
       });
       res.json({ 
         name: user.name,
