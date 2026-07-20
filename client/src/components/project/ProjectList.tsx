@@ -14,11 +14,30 @@ function ProjectList({
   onEditProject
 }: ProjectListProps) {
 
+  if (projects.length === 0) {
+  return (
+    <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-border bg-surface text-center">
+      <p className="text-4xl mb-2">📁</p>
+
+      <h3 className="font-semibold">
+        No projects yet
+      </h3>
+
+      <p className="text-sm text-text-secondary mt-1 max-w-xs">
+        Create your first project to start tracking your team's progress.
+      </p>
+    </div>
+  );
+}
+
   return (
     <div className="h-62 overflow-y-auto items-center rounded-xl border border-border bg-surface shadow-sm p-4">
       <h2 className="font-bold text-base">Projects</h2>
 
-        {projects.map((project) => (
+        {
+        
+        projects.map((project) => (
+          
           <div
             key={project.id}
             onClick={() => onSelectProject(project)}

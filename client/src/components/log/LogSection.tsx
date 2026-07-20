@@ -112,6 +112,7 @@ function LogSection({
       <LogList
         logs={logs}
         onEditLog={handleEditLog}
+        selectedProject={selectedProject}
       />
       <LogForm
         content={content}
