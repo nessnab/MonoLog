@@ -4,6 +4,8 @@ A collaborative workspace where teams create projects and share progress through
 
 Built with React, TypeScript, Express, Prisma and PostgreSQL.
 
+## Live Demo: https://monolog-app.vercel.app/
+
 ## Overview
 
 MonoLog is a lightweight project management application inspired by modern collaboration tools.
@@ -119,6 +121,11 @@ Server
 ```env
 DATABASE_URL=
 JWT_SECRET=
+```
+
+Client
+```env
+VITE_API_URL=
 ```
 
 ## Future Improvements
