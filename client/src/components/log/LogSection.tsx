@@ -27,7 +27,7 @@ function LogSection({
   logs,
   setLogs,
 }: LogSectionProps) {
-
+  const API = import.meta.env.VITE_API_URL;
   const [content, setContent] = useState("")
   const [error, setError] = useState("");
   const [editingLogId, setEditingLogId] = useState<number | null>(null)
@@ -46,7 +46,7 @@ function LogSection({
     try {
       if (editingLogId) {
         const res = await fetch(
-          `http://localhost:3000/logs/${editingLogId}`,
+          `${API}/logs/${editingLogId}`,
           {
             method: "PUT",
             credentials: "include",
@@ -72,7 +72,7 @@ function LogSection({
         } 
       } else {
         const res = await fetch(
-          "http://localhost:3000/logs",
+          `${API}/logs`,
           {
             method: "POST",
             credentials: "include",

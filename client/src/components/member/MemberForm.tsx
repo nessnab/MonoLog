@@ -8,6 +8,7 @@ import Input from '../ui/Input'
 import Button from '../ui/Button'
 
 function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
+  const API = import.meta.env.VITE_API_URL;
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -27,7 +28,7 @@ function MemberForm({ workspaceId, refreshMembers }: MemberFormProps) {
   }
 
     try {
-      const response = await fetch('http://localhost:3000/member', {
+      const response = await fetch(`${API}/member`, {
         method: 'POST',
         credentials: 'include',
         headers: {

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function LoginForm() {
+  const API = import.meta.env.VITE_API_URL;
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
@@ -11,7 +12,7 @@ function LoginForm() {
     e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch(`${API}/auth/login`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -27,7 +28,7 @@ function LoginForm() {
         return
       }
 
-      const userRes = await fetch('http://localhost:3000/auth/me', {
+      const userRes = await fetch(`${API}/auth/me`, {
         credentials: 'include',
       });
 

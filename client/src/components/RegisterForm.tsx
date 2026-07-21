@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function RegisterForm() {
+  const API = import.meta.env.VITE_API_URL;
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -14,7 +15,7 @@ function RegisterForm() {
     e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:3000/admin', {
+      const response = await fetch(`${API}/admin`, {
         method: 'POST',
         credentials: 'include',
         headers: {

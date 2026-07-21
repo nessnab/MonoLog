@@ -35,6 +35,7 @@ function ProjectSection({
   selectedProject,
   setSelectedProject,
 }: ProjectSectionProps) {
+  const API = import.meta.env.VITE_API_URL;
   const [projectName, setProjectName] = useState("")
   const [projectDesc, setProjectDesc] = useState("")
   const [error, setError] = useState("");
@@ -52,7 +53,7 @@ function ProjectSection({
       if (editingProjectId) {
         // EDIT
         const res = await fetch(
-          `http://localhost:3000/projects/${editingProjectId}`,
+          `${API}/projects/${editingProjectId}`,
           {
             method: "PUT",
             credentials: "include",
@@ -79,7 +80,7 @@ function ProjectSection({
         }
       } else {
         const res = await fetch(
-          "http://localhost:3000/projects",
+          `${API}/projects`,
           {
             method: "POST",
             credentials: "include",

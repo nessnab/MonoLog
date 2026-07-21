@@ -27,6 +27,7 @@ import MemberSection from '../components/member/MemberSection'
 function DashboardPage() {
   
 
+  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate()
   
   const [user, setUser] = useState<User | null>(null)
@@ -40,7 +41,7 @@ function DashboardPage() {
 
   // USER
   useEffect(() => {
-      fetch('http://localhost:3000/auth/me', {
+      fetch(`${API}/auth/me`, {
         credentials: 'include',
       })
         .then(response => response.json())
@@ -52,7 +53,7 @@ function DashboardPage() {
 
   // WORKSPACE
   useEffect(() => {
-    fetch(`http://localhost:3000/workspace/`, {
+    fetch(`${API}/workspace/`, {
       credentials: "include",
     })
       .then(response => response.json())
@@ -67,7 +68,7 @@ function DashboardPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/workspace/${user.workspaceId}/users`,
+        `${API}/workspace/${user.workspaceId}/users`,
         {
           credentials: "include",
         }
@@ -92,7 +93,7 @@ function DashboardPage() {
   if (!user) return;
 
   fetch(
-    `http://localhost:3000/workspace/${user.workspaceId}/projects`,
+    `${API}/workspace/${user.workspaceId}/projects`,
     {
       credentials: "include",
     }
@@ -108,7 +109,7 @@ function DashboardPage() {
   useEffect(() => {
     if (!selectedProject || !user) return;
     fetch(
-      `http://localhost:3000/workspace/${user.workspaceId}/projects/${selectedProject.id}/logs`,
+      `${API}/workspace/${user.workspaceId}/projects/${selectedProject.id}/logs`,
       {
         credentials: 'include',
       }
@@ -125,7 +126,7 @@ function DashboardPage() {
   const handleLogout = async () => {
     try {
       await fetch(
-        "http://localhost:3000/auth/logout",
+        `${API}/auth/logout`,
         {
           method: "POST",
           credentials: "include",
